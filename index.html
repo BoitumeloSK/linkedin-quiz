@@ -15,11 +15,20 @@
   </head>
   <body>
     <div id="begin-quiz" class="begin-quiz"></div>
-    <div id="input-div" class="input-div">
-        <input type="text" id="textarea"/>
-        <input type="submit" value="Enter" id="submitBtn"/>
+    <div id="quiz">
+    <div id="input-div" class="input-div"></div>
+    <div id="quiz-complete" class="quizComplete">
+        <input type="radio" id="first" name="radioBtn"/>
+        <label for="first" id="label1"></label>
+        <input type="radio" id="second" name="radioBtn"/>
+        <label for="second" id="label2"></label>
+        <input type="radio" id="third" name="radioBtn"/>
+        <label for="third" id="label3"></label>
+        <input type="radio" id="fourth" name="radioBtn"/>
+        <label for="fourth" id="label4"></label>
     </div>
-    <div id="quiz-complete"></div>
+    <div id="results-div"></div>
+</div>
     <script src="assets/js/script.js"></script>
   </body>
 </html>
