@@ -1,0 +1,4 @@
+.begin-quiz, .input-div{
+    display: flex;
+    justify-content: center;
+}
