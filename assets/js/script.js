@@ -1,72 +1,53 @@
 var inputDiv = $("#input-div").css("display", "none");
 var quizComplete = $("#quiz-complete").css("display", "none");
 var resultsDiv = $("#results-div").css("display", "none");
-$("#quiz").css("display","flex").css("flex-direction", "column").css("align-items", "center")
+$("#quiz")
+  .css("display", "flex")
+  .css("flex-direction", "column")
+  .css("align-items", "center");
 
+  //put options in array 
 var questions = [
   {
     question: "2 X 4 = ",
-    answers: {
-      first: 6,
-      second: 7,
-      //answer
-      third: 8,
-      fourth: 9,
-    },
-    correct: "third",
+    answers: [6,7,8,9],
+    correct: 8,
   },
 
   {
     question: "36 / 6 = ",
-    answers: {
-      first: 18,
-      //answer
-      second: 6,
-      third: 12,
-      fourth: 8,
-    },
-    correct: "second",
+    answers: [18,6,12,8],
+    correct: 6,
   },
 
   {
     question: "102 + 2(12 - 4) = ",
-    answers: {
-      first: 105,
-      second: 124,
-      third: 832,
-      //answer
-      fourth: 118,
-    },
-    correct: "fourth",
+    answers: [105,124,832,118],
+    correct: 118,
   },
 
   {
     question: "1 + 48 / 12 X 3 = ",
-    answers: {
-      //answer
-      first: 13,
-      second: 12.25,
-      third: 1.36,
-      fourth: 14,
-    },
-    correct: "first",
+    answers: [13,12.25,1.36,14],
+    correct: 13,
   },
   {
     question: "1 + 1 = ",
-    answers: {
-      first: 4,
-      second: 3,
-      third: 2,
-      //answer
-      fourth: 1,
-    },
-    correct: "fourth",
+    answers: [4,3,2,1],
+    correct: 2,
   },
 ];
 var count = 0;
+var answers = questions[count].answers;
+
+function labels(){
+  $("#label1").text(answers[0])
+  $("#label2").text(answers[1]);
+  $("#label3").text(answers[2]);
+  $("#label4").text(answers[3]);
+}
 
 var startBtn = $("<button>").text("Start").css("cursor", "pointer");
-
 var testDiv = $("#begin-quiz");
 testDiv.append(startBtn);
 
@@ -76,8 +57,6 @@ startBtn.on("click", function () {
   inputDiv
     .css("display", "block")
     .css("width", "80%")
-    .css("border", "black 1px")
-    .css("border-radius", "4px");
   var headingDiv = $("<div>")
     .css("background-color", "grey")
     .css("text-align", "center");
@@ -88,46 +67,46 @@ startBtn.on("click", function () {
 
   var displayQuestion = $("<div>").css("text-align", "center");
   var question = $("<h4>").text(questions[count].question);
+  
+  var checkBtn = $("<button>").text("Check Answer");
+  var nextBtn = $("<button>").text("Next").css("display", "none");
 
   inputDiv.append(displayQuestion);
   displayQuestion.append(question);
   quizComplete.css("display", "block");
   resultsDiv.css("display", "flex");
 
-  var answers = questions[count].answers;
+  labels()
 
-  $("#first").text(answers.first);
-  $("#label1").text(answers.first);
-  $("#second").text(answers.second);
-  $("#label2").text(answers.second);
-  $("#third").text(answers.third);
-  $("#label3").text(answers.third);
-  $("#fourth").text(answers.fourth);
-  $("#label4").text(answers.fourth);
-
-  
-  var checkBtn = $("<button>").text("Check Answer")
-  var nextBtn = $("<button>").text("Next").css("display","none")
   resultsDiv.append(checkBtn);
 
-  checkBtn.on("click", function () {
-     checkBtn.css("display", "none")
-     nextBtn.css("display", "block")
-    });
-  
+  //check answer btn
+  checkBtn.on("click", function(){
+    checkBtn.css("display", "none");
+    nextBtn.css("display", "block");
+  });
 
-  nextBtn.on("click", function(){
-    nextBtn.css("display","none")
-    checkBtn.css("display","block")
-    $("input[type=radio]").prop("checked", false)
-    count = count + 1
-    answers = questions[count].answers
-    question.text(questions[count].question)
-    
-  })
-  resultsDiv.append(nextBtn)
-  
+  //next btn
+  nextBtn.on("click", function () {
+    nextBtn.css("display", "none");
+    checkBtn.css("display", "block");
+
+    $("input[type=radio]").prop("checked", false);
+
+    count = count + 1;
+    answers = questions[count].answers;
+    labels()
+    question.text(questions[count].question);
+
+    if(count > 4)
+    {
+      
+    }
+  });
+  resultsDiv.append(nextBtn);
 });
+
+
 // startBtn.on("click", function(){
 
 //     var answers = []
