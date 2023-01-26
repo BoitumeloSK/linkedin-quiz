@@ -90,7 +90,7 @@ startBtn.on("click", function () {
   labels();
 
   resultsDiv.append(checkBtn);
-  
+
   /** Moves on to the next question after 5 seconds (test) - currently only works for 1st question*/
   function nextQuestion() {
     nextBtn.css("display", "none");
@@ -104,10 +104,19 @@ startBtn.on("click", function () {
     labels();
     question.text(questions[count].question);
   }
-  // setTimeout(() => {
-  //   nextQuestion();
-  // }, 5000);
 
+  var time = 15;
+  function startTime() {
+    if (time <= 0) {
+      nextQuestion();
+      time = 15;
+    } else {
+      $("#timeout").text(time + " seconds left");
+    }
+    time -= 1;
+  }
+
+  var decreaseTime = setInterval(startTime, 1000);
 
   //check answer btn
   checkBtn.on("click", function () {
@@ -115,41 +124,45 @@ startBtn.on("click", function () {
     nextBtn.css("display", "block");
     messageDiv.css("display", "flex");
 
+    var trueTime = time + 1
+    clearInterval(decreaseTime);
+    $("#timeout").text(trueTime + " seconds left");
+    console.log(trueTime);
+
     var checkedNumber = $("input[type=radio]:checked").val();
-    //var isChecked = $("input[type=radio]:checked"
+    var x = questions[count].correct;
 
-    var x = questions[count].correct
+    responses.push(checkedNumber);
+    console.log(responses)
 
-      if (checkedNumber == x) {
-        messageDiv.append(rightAnswer);
-      } else {
-        messageDiv.append(wrongAnswer);
-      }
+    if (checkedNumber == x) {
+      messageDiv.append(rightAnswer);
+    } else {
+      messageDiv.append(wrongAnswer);
+    }
   });
 
-  //next btn
+  /**Records the selected answer for each question and goes to the next question when clicked */
   nextBtn.on("click", function () {
-    var checkedNumber = $("input[type=radio]:checked").val();
-    nextQuestion()
+    nextQuestion();
 
-    questions.forEach((question)=>{
-      if($("input[type=radio]:checked"))
-      {
-        responses.push(checkedNumber)
-      }
-    })
-//     if(count > 4)
-//     {
-//       testDiv.css("display", "none")
-// //    inputDiv.css("display", "none")
-// //             quizComplete.css("display", "block")
+    //clearInterval(decreaseTime);
+    time = 15
+    decreaseTime = setInterval(startTime, 1000);
+    //reset setInterval
 
-// //             var congratulations = $("<h1>").text("Quiz Complete")
-// //             quizComplete.append(congratulations)
+    //     if(count > 4)
+    //     {
+    //       testDiv.css("display", "none")
+    // //    inputDiv.css("display", "none")
+    // //             quizComplete.css("display", "block")
 
-// //             var answered = $("<p>").text(answers.length)
-// //             quizComplete.append(answered)
-//     }
+    // //             var congratulations = $("<h1>").text("Quiz Complete")
+    // //             quizComplete.append(congratulations)
+
+    // //             var answered = $("<p>").text(answers.length)
+    // //             quizComplete.append(answered)
+    //     }
   });
   resultsDiv.append(nextBtn);
 });
@@ -210,11 +223,11 @@ startBtn.on("click", function () {
         quizComplete.append(error);
       } */
 
-       //if(checkedNumber != question.correct)
-      // else
-      // {
-      //   count = count
-      //   console.log
-      //   var message = $("<p>").text("Please select an answer")
-      //   messageDiv.append(message)
-      // }
+//if(checkedNumber != question.correct)
+// else
+// {
+//   count = count
+//   console.log
+//   var message = $("<p>").text("Please select an answer")
+//   messageDiv.append(message)
+// }

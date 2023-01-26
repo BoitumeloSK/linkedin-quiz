@@ -2,9 +2,12 @@
     display: flex;
     justify-content: center;
 }
-/* .input-div{
-    border: 1px;
-} */
+.block{
+    display: block;
+}
+.hide{
+    display: none;
+}
 button{
     margin:16px
 }
