@@ -1,6 +1,8 @@
 //declare global variables
-var time = 15;
+
 var decreaseTime
+var questionTime 
+var quizTime
 var totalTime = []
 var correctAnswers = []
 
@@ -65,6 +67,7 @@ testDiv.append(startBtn);
 
 /**Starts the quiz */
 startBtn.on("click", function () {
+  var time = 15;
   $("#timeout").text(time + " seconds left");
   var decreaseTime1 = setInterval(()=>{
     time -=1
@@ -74,6 +77,15 @@ startBtn.on("click", function () {
       clearInterval(decreaseTime1)
     }
   }, 1000)
+
+  function startTime() {
+    if (time <= 0) {
+      time = 15;
+    } else {
+      $("#timeout").text(time + " seconds left");
+    }
+    time -= 1;
+  }
   
   beginQuiz.css("display", "none");
   inputDiv.css("display", "block").css("width", "80%");
@@ -102,17 +114,6 @@ startBtn.on("click", function () {
 
   resultsDiv.append(checkBtn);
 
-  function startTime() {
-    if (time <= 0) {
-      time = 15;
-      checkBtn.css("display", "none")
-      nextBtn.css("display", "block")
-    } else {
-      $("#timeout").text(time + " seconds left");
-    }
-    time -= 1;
-  }
-
 
   /** Moves on to the next question after 5 seconds (test) - currently only works for 1st question*/
   function nextQuestion() {
@@ -140,16 +141,22 @@ startBtn.on("click", function () {
 
     $("#timeout").text(time + " seconds left");
 
-    //cannot add times 
+    questionTime = 15 - time
+    totalTime.push(questionTime)
+
+    // var quizTime = totalTime.reduce((a, b) => a + b, 0)
+    quizTime = 0
+    totalTime.forEach((t) =>{
+      quizTime += t
+    })
+    console.log(quizTime)
     
-    totalTime.push(time)
     
     clearInterval(decreaseTime1)
     clearInterval(decreaseTime);
 
     var checkedNumber = $("input[type=radio]:checked").val();
     var x = questions[count].correct;
-    console.log(checkedNumber,x)
 
     if(checkedNumber != undefined)
     {
@@ -194,14 +201,12 @@ startBtn.on("click", function () {
     var congratulations = $("<h1>").text("Quiz Complete")
     var answered = $("<p>").text(`You have answered ${responses.length} out of ${questions.length} questions`)
     var score = $("<p>").text(`Your score is ${correctAnswers.length} out of ${questions.length}`)
-  
-    console.log(answered)
-    console.log(responses)
+    var scoreTime = $("<p>").text(`You completed the quiz in ${quizTime} seconds`)
     
     beginQuiz.append(congratulations)
     beginQuiz.append(answered)
     beginQuiz.append(score) 
-    //show correct and incorrect answers for scoreboard 
+    beginQuiz.append(scoreTime)
   })
 
 });
