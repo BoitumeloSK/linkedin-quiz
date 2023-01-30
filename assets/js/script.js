@@ -1,8 +1,15 @@
+//declare global variables
+var time = 15;
+var decreaseTime
+var totalTime = []
+var correctAnswers = []
+
 var inputDiv = $("#input-div").css("display", "none");
 var quizComplete = $("#quiz-complete").css("display", "none");
 var resultsDiv = $("#results-div").css("display", "none");
 var messageDiv = $("#message").css("display", "none");
-$("#quiz")
+var beginQuiz = $("#begin-quiz")
+var quizDiv = $("#quiz")
   .css("display", "flex")
   .css("flex-direction", "column")
   .css("align-items", "center");
@@ -56,10 +63,22 @@ var startBtn = $("<button>").text("Start").css("cursor", "pointer");
 var testDiv = $("#begin-quiz");
 testDiv.append(startBtn);
 
+/**Starts the quiz */
 startBtn.on("click", function () {
-  var responses = [];
-  startBtn.css("display", "none");
+  $("#timeout").text(time + " seconds left");
+  var decreaseTime1 = setInterval(()=>{
+    time -=1
+    $("#timeout").text(time + " seconds left");
+    if(time <= 0)
+    {
+      clearInterval(decreaseTime1)
+    }
+  }, 1000)
+  
+  beginQuiz.css("display", "none");
   inputDiv.css("display", "block").css("width", "80%");
+
+  var responses = [];
   var headingDiv = $("<div>")
     .css("background-color", "grey")
     .css("text-align", "center");
@@ -70,17 +89,9 @@ startBtn.on("click", function () {
 
   var displayQuestion = $("<div>").css("text-align", "center");
   var question = $("<h4>").text(questions[count].question);
-  var rightAnswer = $("<p>")
-    .text("Correct")
-    .css("color", "green")
-    .css("text-align", "center");
-  var wrongAnswer = $("<p>")
-    .text("Incorrect")
-    .css("color", "red")
-    .css("text-align", "center");
-
   var checkBtn = $("<button>").text("Check Answer");
   var nextBtn = $("<button>").text("Next").css("display", "none");
+  var completeBtn = $("<button>").text("Complete Quiz")
 
   inputDiv.append(displayQuestion);
   displayQuestion.append(question);
@@ -91,32 +102,35 @@ startBtn.on("click", function () {
 
   resultsDiv.append(checkBtn);
 
-  /** Moves on to the next question after 5 seconds (test) - currently only works for 1st question*/
-  function nextQuestion() {
-    nextBtn.css("display", "none");
-    checkBtn.css("display", "block");
-    messageDiv.css("display", "none");
-
-    $("input[type=radio]").prop("checked", false);
-
-    count = count + 1;
-    answers = questions[count].answers;
-    labels();
-    question.text(questions[count].question);
-  }
-
-  var time = 15;
   function startTime() {
     if (time <= 0) {
-      nextQuestion();
       time = 15;
+      checkBtn.css("display", "none")
+      nextBtn.css("display", "block")
     } else {
       $("#timeout").text(time + " seconds left");
     }
     time -= 1;
   }
 
-  var decreaseTime = setInterval(startTime, 1000);
+
+  /** Moves on to the next question after 5 seconds (test) - currently only works for 1st question*/
+  function nextQuestion() {
+    nextBtn.css("display", "none");
+    checkBtn.css("display", "block");
+    messageDiv.css("display", "none");
+    $("input[type=radio]").prop("checked", false);
+    
+    count = count + 1;
+
+    if(count <= 4)
+    {
+      answers = questions[count].answers;
+      labels();
+      question.text(questions[count].question);
+    }
+  }
+
 
   //check answer btn
   checkBtn.on("click", function () {
@@ -124,104 +138,73 @@ startBtn.on("click", function () {
     nextBtn.css("display", "block");
     messageDiv.css("display", "flex");
 
-    var trueTime = time + 1
+    $("#timeout").text(time + " seconds left");
+
+    //cannot add times 
+    
+    totalTime.push(time)
+    
+    clearInterval(decreaseTime1)
     clearInterval(decreaseTime);
-    $("#timeout").text(trueTime + " seconds left");
-    console.log(trueTime);
 
     var checkedNumber = $("input[type=radio]:checked").val();
     var x = questions[count].correct;
+    console.log(checkedNumber,x)
 
-    responses.push(checkedNumber);
-    console.log(responses)
+    if(checkedNumber != undefined)
+    {
+      responses.push(checkedNumber);
+    }
 
-    if (checkedNumber == x) {
-      messageDiv.append(rightAnswer);
+    messageDiv.innerText = ""
+    
+    if (Number(checkedNumber) == Number(x)) {
+      messageDiv.text("Correct").css("color", "green")
+      .css("text-align", "center");;
+      correctAnswers.push(checkedNumber)
     } else {
-      messageDiv.append(wrongAnswer);
+      messageDiv.text("Incorrect").css("color", "red")
+      .css("text-align", "center");;
+    }
+
+    if(count == 4)
+    {
+      nextBtn.css("display", "none")
+      resultsDiv.append(completeBtn)
+      completeBtn.css("display","block")
     }
   });
 
   /**Records the selected answer for each question and goes to the next question when clicked */
   nextBtn.on("click", function () {
-    nextQuestion();
-
-    //clearInterval(decreaseTime);
+    //reset setInterval
     time = 15
     decreaseTime = setInterval(startTime, 1000);
-    //reset setInterval
-
-    //     if(count > 4)
-    //     {
-    //       testDiv.css("display", "none")
-    // //    inputDiv.css("display", "none")
-    // //             quizComplete.css("display", "block")
-
-    // //             var congratulations = $("<h1>").text("Quiz Complete")
-    // //             quizComplete.append(congratulations)
-
-    // //             var answered = $("<p>").text(answers.length)
-    // //             quizComplete.append(answered)
-    //     }
+    setTimeout(()=>{
+      nextQuestion();
+    }, 1000)
   });
   resultsDiv.append(nextBtn);
+
+  completeBtn.on("click", function(){
+    quizDiv.css("display", "none")
+    beginQuiz.css("display", "block")
+    startBtn.css("display", "none")
+  
+    var congratulations = $("<h1>").text("Quiz Complete")
+    var answered = $("<p>").text(`You have answered ${responses.length} out of ${questions.length} questions`)
+    var score = $("<p>").text(`Your score is ${correctAnswers.length} out of ${questions.length}`)
+  
+    console.log(answered)
+    console.log(responses)
+    
+    beginQuiz.append(congratulations)
+    beginQuiz.append(answered)
+    beginQuiz.append(score) 
+    //show correct and incorrect answers for scoreboard 
+  })
+
 });
-
-// startBtn.on("click", function(){
-
-//     var answers = []
-//     startBtn.css("display", "none")
-//     inputDiv.css("display", "flex")
-
-//     var displayQuestion = $("<h3>")
-//     displayQuestion.text(questions[count])
-//     testDiv.append(displayQuestion)
-
-//     var enter = $("#submitBtn").on("click", function(){
-//         var answer = $("#textarea").val()
-
-//         if(answer != "")
-//         {
-//             answers.push(answer)
-//         }
-
-//         count = count + 1
-//         // setTimeout(function(){
-
-//         // }, 2000)
-//         displayQuestion.text(questions[count])
-
-//         if(count > 4)
-//         {
-//             testDiv.css("display", "none")
-//             inputDiv.css("display", "none")
-//             quizComplete.css("display", "block")
-
-//             var congratulations = $("<h1>").text("Quiz Complete")
-//             quizComplete.append(congratulations)
-
-//             var answered = $("<p>").text(answers.length)
-//             quizComplete.append(answered)
-//         }
-
-//     })
-
-//     // setTimeout(function(){
-
-//     // }, 300000)
-
-// })
-
-/* if (count == 0 && $("#third").is(":checked")) 
-      {
-        var message = $("<p>").text("Correct").css("color", "green");
-        quizComplete.append(message);
-      } 
-      else 
-      {
-        var error = $("<p>").text("Incorrect").css("color", "red");
-        quizComplete.append(error);
-      } */
 
 //if(checkedNumber != question.correct)
 // else
