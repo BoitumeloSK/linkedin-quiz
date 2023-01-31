@@ -1,22 +1,22 @@
 //declare global variables
 
-var decreaseTime
-var questionTime 
-var quizTime
-var totalTime = []
-var correctAnswers = []
+var decreaseTime;
+var questionTime;
+var quizTime;
+var totalTime = [];
+var correctAnswers = [];
+var responses = [];
 
 var inputDiv = $("#input-div").css("display", "none");
 var quizComplete = $("#quiz-complete").css("display", "none");
 var resultsDiv = $("#results-div").css("display", "none");
 var messageDiv = $("#message").css("display", "none");
-var beginQuiz = $("#begin-quiz")
+var beginQuiz = $("#begin-quiz");
 var quizDiv = $("#quiz")
   .css("display", "flex")
   .css("flex-direction", "column")
   .css("align-items", "center");
 
-//put options in array
 var questions = [
   {
     question: "2 X 4 = ",
@@ -49,6 +49,19 @@ var questions = [
 ];
 var count = 0;
 var answers = questions[count].answers;
+var startBtn = $("<button>").text("Start").css("cursor", "pointer");
+var testDiv = $("#begin-quiz");
+var headingDiv = $("<div>")
+  .css("background-color", "grey")
+  .css("text-align", "center");
+var heading = $("<h1>").text("Assessment").css("color", "white");
+var displayQuestion = $("<div>").css("text-align", "center");
+var question = $("<h4>");
+var checkBtn = $("<button>").text("Check Answer");
+var nextBtn = $("<button>").text("Next").css("display", "none");
+var completeBtn = $("<button>").text("Complete Quiz");
+
+testDiv.append(startBtn);
 
 function labels() {
   $("#label1").text(answers[0]);
@@ -61,22 +74,31 @@ function labels() {
   $("#fourth").val(answers[3]);
 }
 
-var startBtn = $("<button>").text("Start").css("cursor", "pointer");
-var testDiv = $("#begin-quiz");
-testDiv.append(startBtn);
-
 /**Starts the quiz */
 startBtn.on("click", function () {
   var time = 15;
-  $("#timeout").text(time + " seconds left");
-  var decreaseTime1 = setInterval(()=>{
-    time -=1
+  var decreaseTime1 = setInterval(() => {
+    time -= 1;
     $("#timeout").text(time + " seconds left");
-    if(time <= 0)
-    {
-      clearInterval(decreaseTime1)
+    if (time <= 0) {
+      clearInterval(decreaseTime1);
     }
-  }, 1000)
+  }, 1000);
+
+  question.text(questions[count].question);
+  $("#timeout").text(time + " seconds left");
+
+  beginQuiz.css("display", "none");
+  inputDiv.css("display", "block").css("width", "80%");
+  quizComplete.css("display", "block");
+  resultsDiv.css("display", "flex");
+
+  inputDiv.append(headingDiv);
+  headingDiv.append(heading);
+  inputDiv.append(displayQuestion);
+  displayQuestion.append(question);
+  labels();
+  resultsDiv.append(checkBtn);
 
   function startTime() {
     if (time <= 0) {
@@ -86,34 +108,6 @@ startBtn.on("click", function () {
     }
     time -= 1;
   }
-  
-  beginQuiz.css("display", "none");
-  inputDiv.css("display", "block").css("width", "80%");
-
-  var responses = [];
-  var headingDiv = $("<div>")
-    .css("background-color", "grey")
-    .css("text-align", "center");
-  var heading = $("<h1>").text("Assessment").css("color", "white");
-
-  inputDiv.append(headingDiv);
-  headingDiv.append(heading);
-
-  var displayQuestion = $("<div>").css("text-align", "center");
-  var question = $("<h4>").text(questions[count].question);
-  var checkBtn = $("<button>").text("Check Answer");
-  var nextBtn = $("<button>").text("Next").css("display", "none");
-  var completeBtn = $("<button>").text("Complete Quiz")
-
-  inputDiv.append(displayQuestion);
-  displayQuestion.append(question);
-  quizComplete.css("display", "block");
-  resultsDiv.css("display", "flex");
-
-  labels();
-
-  resultsDiv.append(checkBtn);
-
 
   /** Moves on to the next question after 5 seconds (test) - currently only works for 1st question*/
   function nextQuestion() {
@@ -121,94 +115,132 @@ startBtn.on("click", function () {
     checkBtn.css("display", "block");
     messageDiv.css("display", "none");
     $("input[type=radio]").prop("checked", false);
-    
+
     count = count + 1;
 
-    if(count <= 4)
-    {
+    if (count <= 4) {
       answers = questions[count].answers;
       labels();
       question.text(questions[count].question);
     }
   }
 
-
-  //check answer btn
+  /**Stops the timer and checks if the selected answer is the correct number for the question */
   checkBtn.on("click", function () {
+    var checkedNumber = $("input[type=radio]:checked").val();
+    var x = questions[count].correct;
+    questionTime = 15 - time;
+    quizTime = 0;
+
+    $("#timeout").text(time + " seconds left");
+
     checkBtn.css("display", "none");
     nextBtn.css("display", "block");
     messageDiv.css("display", "flex");
 
-    $("#timeout").text(time + " seconds left");
-
-    questionTime = 15 - time
-    totalTime.push(questionTime)
-
-    // var quizTime = totalTime.reduce((a, b) => a + b, 0)
-    quizTime = 0
-    totalTime.forEach((t) =>{
-      quizTime += t
-    })
-    console.log(quizTime)
-    
-    
-    clearInterval(decreaseTime1)
+    clearInterval(decreaseTime1);
     clearInterval(decreaseTime);
 
-    var checkedNumber = $("input[type=radio]:checked").val();
-    var x = questions[count].correct;
+    totalTime.push(questionTime);
+    totalTime.forEach((t) => {
+      quizTime += t;
+    });
 
-    if(checkedNumber != undefined)
-    {
+    resultsDiv.append(nextBtn);
+
+    if (checkedNumber != undefined) {
       responses.push(checkedNumber);
     }
 
-    messageDiv.innerText = ""
-    
+    messageDiv.innerText = "";
+
     if (Number(checkedNumber) == Number(x)) {
-      messageDiv.text("Correct").css("color", "green")
-      .css("text-align", "center");;
-      correctAnswers.push(checkedNumber)
+      messageDiv
+        .text("Correct")
+        .css("color", "green")
+        .css("text-align", "center");
+      correctAnswers.push(checkedNumber);
     } else {
-      messageDiv.text("Incorrect").css("color", "red")
-      .css("text-align", "center");;
+      messageDiv
+        .text("Incorrect")
+        .css("color", "red")
+        .css("text-align", "center");
     }
 
-    if(count == 4)
-    {
-      nextBtn.css("display", "none")
-      resultsDiv.append(completeBtn)
-      completeBtn.css("display","block")
+    if (count == 4) {
+      nextBtn.css("display", "none");
+      resultsDiv.append(completeBtn);
+      completeBtn.css("display", "block");
     }
   });
 
   /**Records the selected answer for each question and goes to the next question when clicked */
   nextBtn.on("click", function () {
-    //reset setInterval
-    time = 15
+    time = 15;
     decreaseTime = setInterval(startTime, 1000);
-    setTimeout(()=>{
+    setTimeout(() => {
       nextQuestion();
-    }, 1000)
+    }, 1000);
   });
-  resultsDiv.append(nextBtn);
 
-  completeBtn.on("click", function(){
-    quizDiv.css("display", "none")
-    beginQuiz.css("display", "block")
-    startBtn.css("display", "none")
-  
-    var congratulations = $("<h1>").text("Quiz Complete")
-    var answered = $("<p>").text(`You have answered ${responses.length} out of ${questions.length} questions`)
-    var score = $("<p>").text(`Your score is ${correctAnswers.length} out of ${questions.length}`)
-    var scoreTime = $("<p>").text(`You completed the quiz in ${quizTime} seconds`)
-    
-    beginQuiz.append(congratulations)
-    beginQuiz.append(answered)
-    beginQuiz.append(score) 
-    beginQuiz.append(scoreTime)
-  })
+  /**Shows quiz results */
+  completeBtn.on("click", function () {
+    var congratulations = $("<h1>").text("Quiz Complete");
+    var answered = $("<p>").text(
+      `You have answered ${responses.length} out of ${questions.length} questions`
+    );
+    var score = $("<p>").text(
+      `Your score is ${correctAnswers.length} out of ${questions.length}`
+    );
+    var scoreTime = $("<p>").text(
+      `You completed the quiz in ${quizTime} seconds`
+    );
 
+    var scoreDiv = $("<div>");
+    var alertDiv = $("<div>");
+    var alert = $("<p>").text("Please choose a different username");
+    var nameInput = $("<input>").attr("type", "text");
+    var submitBtn = $("<button>").text("Submit");
+    var stored = JSON.parse(localStorage.getItem("scoreBoard"));
+    var usernames = stored || [];
+    var details = {
+      user: "",
+      points: correctAnswers.length,
+      timeRecord: quizTime,
+    };
+
+    submitBtn.on("click", function () {
+      details.user = nameInput.val();
+      if (stored.includes(details.user)) {
+        alertDiv.append(alert);
+      } else {
+        usernames.push(details);
+        nameInput.attr("class", "hide");
+        submitBtn.attr("class", "hide");
+        localStorage.setItem("scoreBoard", JSON.stringify(usernames));
+        stored.forEach((item) => {
+          scoreDiv.append(
+            $("<div>").text(
+              `${item.user} | ${item.points} | ${item.timeRecord}`
+            )
+          );
+        });
+      }
+    });
+
+    quizDiv.css("display", "none");
+    beginQuiz.css("display", "block");
+    startBtn.css("display", "none");
+
+    beginQuiz.append(congratulations);
+    beginQuiz.append(answered);
+    beginQuiz.append(score);
+    beginQuiz.append(scoreTime);
+    beginQuiz.append(alertDiv);
+    beginQuiz.append(scoreDiv);
+    scoreDiv.append(nameInput);
+    scoreDiv.append(submitBtn);
+  });
 });
 
 //if(checkedNumber != question.correct)
