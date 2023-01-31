@@ -7,13 +7,13 @@ var totalTime = [];
 var correctAnswers = [];
 var responses = [];
 
-var inputDiv = $("#input-div").css("display", "none");
-var quizComplete = $("#quiz-complete").css("display", "none");
-var resultsDiv = $("#results-div").css("display", "none");
-var messageDiv = $("#message").css("display", "none");
+var inputDiv = $("#input-div").attr("class", "hide");
+var quizComplete = $("#quiz-complete").attr("class", "hide");
+var resultsDiv = $("#results-div").attr("class", "hide");
+var messageDiv = $("#message").attr("class", "hide");
 var beginQuiz = $("#begin-quiz");
 var quizDiv = $("#quiz")
-  .css("display", "flex")
+  .attr("class", "flex")
   .css("flex-direction", "column")
   .css("align-items", "center");
 
@@ -58,8 +58,19 @@ var heading = $("<h1>").text("Assessment").css("color", "white");
 var displayQuestion = $("<div>").css("text-align", "center");
 var question = $("<h4>");
 var checkBtn = $("<button>").text("Check Answer");
-var nextBtn = $("<button>").text("Next").css("display", "none");
+var nextBtn = $("<button>").text("Next");
 var completeBtn = $("<button>").text("Complete Quiz");
+
+var detailsDiv = $("<div>");
+var scoreDiv = $("<div>");
+var alertDiv = $("<div>");
+var boardDiv = $("<div>");
+var alert = $("<p>").text("Please choose a different username");
+var nameInput = $("<input>").attr("type", "text");
+var submitBtn = $("<button>").text("Submit");
+var viewBoard = $("<button>").text("View Score Board");
+var stored = JSON.parse(localStorage.getItem("scoreBoard"));
+var users = stored || [];
 
 testDiv.append(startBtn);
 
@@ -82,16 +93,19 @@ startBtn.on("click", function () {
     $("#timeout").text(time + " seconds left");
     if (time <= 0) {
       clearInterval(decreaseTime1);
+      checkBtn.click();
+      messageDiv.text("Timeout!").css("color", "red");
     }
   }, 1000);
 
   question.text(questions[count].question);
   $("#timeout").text(time + " seconds left");
 
-  beginQuiz.css("display", "none");
+  beginQuiz.attr("class", "hide");
   inputDiv.css("display", "block").css("width", "80%");
-  quizComplete.css("display", "block");
-  resultsDiv.css("display", "flex");
+  quizComplete.attr("class", "show");
+  resultsDiv.attr("class", "flex");
+  nextBtn.attr("class", "hide");
 
   inputDiv.append(headingDiv);
   headingDiv.append(heading);
@@ -99,21 +113,23 @@ startBtn.on("click", function () {
   displayQuestion.append(question);
   labels();
   resultsDiv.append(checkBtn);
+  resultsDiv.append(nextBtn);
 
   function startTime() {
+    $("#timeout").text(time + " seconds left");
     if (time <= 0) {
-      time = 15;
-    } else {
-      $("#timeout").text(time + " seconds left");
+      clearInterval(decreaseTime);
+      checkBtn.click();
+      messageDiv.text("Timeout!").css("color", "red");
     }
     time -= 1;
   }
 
   /** Moves on to the next question after 5 seconds (test) - currently only works for 1st question*/
   function nextQuestion() {
-    nextBtn.css("display", "none");
-    checkBtn.css("display", "block");
-    messageDiv.css("display", "none");
+    nextBtn.attr("class", "hide");
+    checkBtn.attr("class", "show");
+    messageDiv.attr("class", "hide");
     $("input[type=radio]").prop("checked", false);
 
     count = count + 1;
@@ -127,6 +143,7 @@ startBtn.on("click", function () {
 
   /**Stops the timer and checks if the selected answer is the correct number for the question */
   checkBtn.on("click", function () {
+    clearInterval(decreaseTime);
     var checkedNumber = $("input[type=radio]:checked").val();
     var x = questions[count].correct;
     questionTime = 15 - time;
@@ -134,19 +151,17 @@ startBtn.on("click", function () {
 
     $("#timeout").text(time + " seconds left");
 
-    checkBtn.css("display", "none");
-    nextBtn.css("display", "block");
-    messageDiv.css("display", "flex");
+    checkBtn.attr("class", "hide");
+    nextBtn.attr("class", "show");
+    messageDiv.attr("class", "flex");
 
     clearInterval(decreaseTime1);
-    clearInterval(decreaseTime);
 
     totalTime.push(questionTime);
     totalTime.forEach((t) => {
       quizTime += t;
     });
-
-    resultsDiv.append(nextBtn);
+    console.log(totalTime);
 
     if (checkedNumber != undefined) {
       responses.push(checkedNumber);
@@ -168,19 +183,19 @@ startBtn.on("click", function () {
     }
 
     if (count == 4) {
-      nextBtn.css("display", "none");
+      nextBtn.attr("class", "hide");
       resultsDiv.append(completeBtn);
-      completeBtn.css("display", "block");
+      completeBtn.attr("class", "show");
     }
   });
 
   /**Records the selected answer for each question and goes to the next question when clicked */
   nextBtn.on("click", function () {
-    time = 15;
-    decreaseTime = setInterval(startTime, 1000);
     setTimeout(() => {
       nextQuestion();
     }, 1000);
+    time = 15;
+    decreaseTime = setInterval(startTime, 1000);
   });
 
   /**Shows quiz results */
@@ -195,72 +210,73 @@ startBtn.on("click", function () {
     var scoreTime = $("<p>").text(
       `You completed the quiz in ${quizTime} seconds`
     );
+    
 
-    var scoreDiv = $("<div>");
-    var alertDiv = $("<div>");
-    var alert = $("<p>").text("Please choose a different username");
-    var nameInput = $("<input>").attr("type", "text");
-    var submitBtn = $("<button>").text("Submit");
-    var stored = JSON.parse(localStorage.getItem("scoreBoard"));
-    var users = stored || [];
+    quizDiv.attr("class", "hide");
+    beginQuiz.attr("class", "show");
+    startBtn.attr("class", "hide");
+
+    beginQuiz.append(detailsDiv);
+    detailsDiv.append(congratulations);
+    detailsDiv.append(answered);
+    detailsDiv.append(score);
+    detailsDiv.append(scoreTime);
+    beginQuiz.append(alertDiv);
+    beginQuiz.append(scoreDiv);
+    scoreDiv.append(nameInput);
+    scoreDiv.append(submitBtn);
+  });
+
+  submitBtn.on("click", function () {
     var details = {
       username: "",
       points: correctAnswers.length,
       timeRecord: Number(quizTime),
     };
-    
-    //users.sort((a,b) => a.timeRecord - b.timeRecord)
-    console.log(users)
-    submitBtn.on("click", function () {
-      details.username = nameInput.val();
-      
-      users.push(details);
-      
-     users.sort((a,b) =>{
-      return b.points - a.points || a.timeRecord - b.timeRecord
-     })
-      //users.sort((a,b) => b.points - a.points)
-      
-      nameInput.attr("class", "hide");
-      submitBtn.attr("class", "hide");
-      localStorage.setItem("scoreBoard", JSON.stringify(users));
+
+    details.username = nameInput.val();
+
+    // if (users.includes(details.username)) {
+    //   alertDiv.append(alert);
+    // } else {
+
+    // }
+
+    users.push(details);
+    users.sort((a, b) => {
+      return b.points - a.points || a.timeRecord - b.timeRecord;
+    });
+
+    scoreDiv.attr("class", "hide");
+    detailsDiv.attr("class", "hide");
+    alertDiv.attr("class", "hide");
+
+    beginQuiz.append(boardDiv);
+    boardDiv.append(viewBoard);
+  });
+
+  viewBoard.on("click", function(){
+    viewBoard.attr("class", "hide")
+    localStorage.setItem("scoreBoard", JSON.stringify(users));
       if (stored == null) {
-        scoreDiv.append(
+        boardDiv.append(
           $("<div>").text(
             `${details.username} | ${details.points} | ${details.timeRecord}`
           )
         );
       } else {
         stored.forEach((item) => {
-          scoreDiv.append(
+          boardDiv.append(
             $("<div>").text(
               `${item.username} | ${item.points} | ${item.timeRecord}`
             )
           );
         });
       }
-
-      // if (users.includes(details.username)) {
-      //   alertDiv.append(alert);
-      // } else {
-
-      // }
-    });
-
-    quizDiv.css("display", "none");
-    beginQuiz.css("display", "block");
-    startBtn.css("display", "none");
-
-    beginQuiz.append(congratulations);
-    beginQuiz.append(answered);
-    beginQuiz.append(score);
-    beginQuiz.append(scoreTime);
-    beginQuiz.append(alertDiv);
-    beginQuiz.append(scoreDiv);
-    scoreDiv.append(nameInput);
-    scoreDiv.append(submitBtn);
-  });
+  })
 });
+
+
 
 //if(checkedNumber != question.correct)
 // else
