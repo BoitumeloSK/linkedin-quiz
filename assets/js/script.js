@@ -202,30 +202,49 @@ startBtn.on("click", function () {
     var nameInput = $("<input>").attr("type", "text");
     var submitBtn = $("<button>").text("Submit");
     var stored = JSON.parse(localStorage.getItem("scoreBoard"));
-    var usernames = stored || [];
+    var users = stored || [];
     var details = {
-      user: "",
+      username: "",
       points: correctAnswers.length,
-      timeRecord: quizTime,
+      timeRecord: Number(quizTime),
     };
-
+    
+    //users.sort((a,b) => a.timeRecord - b.timeRecord)
+    console.log(users)
     submitBtn.on("click", function () {
-      details.user = nameInput.val();
-      if (stored.includes(details.user)) {
-        alertDiv.append(alert);
+      details.username = nameInput.val();
+      
+      users.push(details);
+      
+     users.sort((a,b) =>{
+      return b.points - a.points || a.timeRecord - b.timeRecord
+     })
+      //users.sort((a,b) => b.points - a.points)
+      
+      nameInput.attr("class", "hide");
+      submitBtn.attr("class", "hide");
+      localStorage.setItem("scoreBoard", JSON.stringify(users));
+      if (stored == null) {
+        scoreDiv.append(
+          $("<div>").text(
+            `${details.username} | ${details.points} | ${details.timeRecord}`
+          )
+        );
       } else {
-        usernames.push(details);
-        nameInput.attr("class", "hide");
-        submitBtn.attr("class", "hide");
-        localStorage.setItem("scoreBoard", JSON.stringify(usernames));
         stored.forEach((item) => {
           scoreDiv.append(
             $("<div>").text(
-              `${item.user} | ${item.points} | ${item.timeRecord}`
+              `${item.username} | ${item.points} | ${item.timeRecord}`
             )
           );
         });
       }
+
+      // if (users.includes(details.username)) {
+      //   alertDiv.append(alert);
+      // } else {
+
+      // }
     });
 
     quizDiv.css("display", "none");
