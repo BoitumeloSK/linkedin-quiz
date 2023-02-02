@@ -14,23 +14,24 @@
     ></script>
   </head>
   <body>
-    <div id="begin-quiz" class="begin-quiz"></div>
-    <div id="quiz">
-    <div id="input-div" class="input-div"></div>
-    <div id="quiz-complete" class="quizComplete">
-        <input type="radio" id="first" name="radioBtn"/>
-        <label for="first" id="label1"></label>
-        <input type="radio" id="second" name="radioBtn"/>
-        <label for="second" id="label2"></label>
-        <input type="radio" id="third" name="radioBtn"/>
-        <label for="third" id="label3"></label>
-        <input type="radio" id="fourth" name="radioBtn"/>
-        <label for="fourth" id="label4"></label>
+    <div id="start-quiz" class="begin-quiz"></div>
+    <div id="quiz" class="quiz">
+      <div id="heading" class="heading"></div>
+      <div id="question"></div>
+      <div id="options" class="options">
+        <input type="radio" id="first" name="radioBtn" />
+        <label for="first" id="label1" class="container"></label>
+        <input type="radio" id="second" name="radioBtn" />
+        <label for="second" id="label2" class="container"></label>
+        <input type="radio" id="third" name="radioBtn" />
+        <label for="third" id="label3" class="container"></label>
+        <input type="radio" id="fourth" name="radioBtn" />
+        <label for="fourth" id="label4" class="container"></label>
+      </div>
+      <div id="countdown" class="timeout"></div>
+      <div id="message"></div>
+      <div id="results-div"></div>
     </div>
-    <div id="timeout" class="timeout"></div>
-    <div id="message"></div>
-    <div id="results-div"></div>
-</div>
     <script src="assets/js/script.js"></script>
   </body>
 </html>

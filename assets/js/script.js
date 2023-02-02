@@ -7,15 +7,13 @@ var totalTime = [];
 var correctAnswers = [];
 var responses = [];
 
-var inputDiv = $("#input-div").attr("class", "hide");
-var quizComplete = $("#quiz-complete").attr("class", "hide");
-var resultsDiv = $("#results-div").attr("class", "hide");
-var messageDiv = $("#message").attr("class", "hide");
+var quizDiv = $("#quiz").css("display", "none");
+var options = $("#options").css("display", "none");
+var countdown = $("#countdown")
+var resultsDiv = $("#results-div").css("display", "none");
+var messageDiv = $("#message").css("display", "none");
 var beginQuiz = $("#begin-quiz");
-var quizDiv = $("#quiz")
-  .attr("class", "flex")
-  .css("flex-direction", "column")
-  .css("align-items", "center");
+//var quizDiv = $("#quiz").css("display", "none");
 
 var questions = [
   {
@@ -49,16 +47,16 @@ var questions = [
 ];
 var count = 0;
 var answers = questions[count].answers;
-var startBtn = $("<button>").text("Start").css("cursor", "pointer");
-var testDiv = $("#begin-quiz");
-var headingDiv = $("<div>")
+var startBtn = $("<button>").text("Start");
+var startQuiz = $("#start-quiz");
+var headingDiv = $("#heading")
   .css("background-color", "grey")
   .css("text-align", "center");
-var heading = $("<h1>").text("Assessment").css("color", "white");
-var displayQuestion = $("<div>").css("text-align", "center");
-var question = $("<h4>");
-var checkBtn = $("<button>").text("Check Answer");
-var nextBtn = $("<button>").text("Next");
+var heading = $("<h2>").text("Math Quiz").css("color", "white");
+var displayQuestion = $("#question");
+var question = $("<h1>");
+var checkBtn = $("<button>").text("Check Answer").attr("class", "checkBtn");
+var nextBtn = $("<button>").text("Next").attr("class", "nextBtn");
 var completeBtn = $("<button>").text("Complete Quiz");
 
 var detailsDiv = $("<div>");
@@ -72,7 +70,7 @@ var viewBoard = $("<button>").text("View Score Board");
 var stored = JSON.parse(localStorage.getItem("scoreBoard"));
 var users = stored || [];
 
-testDiv.append(startBtn);
+startQuiz.append(startBtn);
 
 function labels() {
   $("#label1").text(answers[0]);
@@ -90,7 +88,7 @@ startBtn.on("click", function () {
   var time = 15;
   var decreaseTime1 = setInterval(() => {
     time -= 1;
-    $("#timeout").text(time + " seconds left");
+    countdown.text(time + " seconds left");
     if (time <= 0) {
       clearInterval(decreaseTime1);
       checkBtn.click();
@@ -99,24 +97,24 @@ startBtn.on("click", function () {
   }, 1000);
 
   question.text(questions[count].question);
-  $("#timeout").text(time + " seconds left");
+  countdown.text(time + " seconds left");
 
-  beginQuiz.attr("class", "hide");
-  inputDiv.css("display", "block").css("width", "80%");
-  quizComplete.attr("class", "show");
-  resultsDiv.attr("class", "flex");
-  nextBtn.attr("class", "hide");
+  quizDiv.css("display", "flex")
+  .css("flex-direction", "column")
+  .css("align-items", "center");
+  startQuiz.css("display", "none");
+  options.css("display", "flex").css("align-items", "center");
+  resultsDiv.css("display", "flex");
+  nextBtn.css("display", "none");
 
-  inputDiv.append(headingDiv);
   headingDiv.append(heading);
-  inputDiv.append(displayQuestion);
   displayQuestion.append(question);
   labels();
   resultsDiv.append(checkBtn);
   resultsDiv.append(nextBtn);
 
   function startTime() {
-    $("#timeout").text(time + " seconds left");
+    countdown.text(time + " seconds left");
     if (time <= 0) {
       clearInterval(decreaseTime);
       checkBtn.click();
@@ -127,9 +125,9 @@ startBtn.on("click", function () {
 
   /** Moves on to the next question after 5 seconds (test) - currently only works for 1st question*/
   function nextQuestion() {
-    nextBtn.attr("class", "hide");
-    checkBtn.attr("class", "show");
-    messageDiv.attr("class", "hide");
+    nextBtn.css("display", "none");
+    checkBtn.css("display", "block");
+    messageDiv.css("display", "none");
     $("input[type=radio]").prop("checked", false);
 
     count = count + 1;
@@ -149,11 +147,11 @@ startBtn.on("click", function () {
     questionTime = 15 - time;
     quizTime = 0;
 
-    $("#timeout").text(time + " seconds left");
+    countdown.text(time + " seconds left");
 
-    checkBtn.attr("class", "hide");
-    nextBtn.attr("class", "show");
-    messageDiv.attr("class", "flex");
+    checkBtn.css("display", "none");
+    nextBtn.css("display", "block");
+    messageDiv.css("display", "flex");
 
     clearInterval(decreaseTime1);
 
@@ -183,9 +181,9 @@ startBtn.on("click", function () {
     }
 
     if (count == 4) {
-      nextBtn.attr("class", "hide");
+      nextBtn.css("display", "none");
       resultsDiv.append(completeBtn);
-      completeBtn.attr("class", "show");
+      completeBtn.css("display", "block");
     }
   });
 
@@ -212,9 +210,9 @@ startBtn.on("click", function () {
     );
     
 
-    quizDiv.attr("class", "hide");
-    beginQuiz.attr("class", "show");
-    startBtn.attr("class", "hide");
+    quizDiv.css("display", "none");
+    beginQuiz.css("display", "block");
+    startBtn.css("display", "none");
 
     beginQuiz.append(detailsDiv);
     detailsDiv.append(congratulations);
@@ -247,16 +245,16 @@ startBtn.on("click", function () {
       return b.points - a.points || a.timeRecord - b.timeRecord;
     });
 
-    scoreDiv.attr("class", "hide");
-    detailsDiv.attr("class", "hide");
-    alertDiv.attr("class", "hide");
+    scoreDiv.css("display", "none");
+    detailsDiv.css("display", "none");
+    alertDiv.css("display", "none");
 
     beginQuiz.append(boardDiv);
     boardDiv.append(viewBoard);
   });
 
   viewBoard.on("click", function(){
-    viewBoard.attr("class", "hide")
+    viewBoard.css("display", "none")
     localStorage.setItem("scoreBoard", JSON.stringify(users));
       if (stored == null) {
         boardDiv.append(
