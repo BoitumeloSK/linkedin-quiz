@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>HTML</title>
     <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
       integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
@@ -13,24 +14,71 @@
       referrerpolicy="no-referrer"
     ></script>
   </head>
+  <header>
+    <div class="container">
+      <nav>
+      <div class="logo">
+         <img src="/assets/images/icons8-linkedin-48.png" />
+         <input type="text" placeholder="Search.." class="site-search">
+      </div>
+      <div class="nav-items">
+        <ul>
+          <li><a href="#"><i class="fa fa-home fa-2x" aria-hidden="true"></i>Home </a></li>
+          <li><a href="#"><i class="fa fa-users fa-2x" aria-hidden="true"></i>My Network</a></li>
+          <li><a href="#"><i class="fa fa-briefcase fa-2x" aria-hidden="true"></i>Jobs</a></li>
+          <li><a href="#"><i class="fa fa-commenting fa-2x" aria-hidden="true"></i>Messaging</a></li>
+          <li><a href="#"><i class="fa fa-bell fa-2x" aria-hidden="true"></i>Notifications</a></li>
+          <li><a href="#"><img src="./assets/images/user.png" aria-hidden="true" class="user"/>Me</a></li>
+          <div class="vl"></div>
+          <li><a href="#"><i class="fa fa-th fa-2x" aria-hidden="true"></i>Work</a></li>
+          <li><a href="#"><img src="./assets/images/video.png" aria-hidden="true" class="user"/>Learning</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </header>
   <body>
     <div id="start-quiz" class="begin-quiz"></div>
-    <div id="quiz" class="quiz">
-      <div id="heading" class="heading"></div>
-      <div id="question"></div>
-      <div id="options" class="options">
-        <input type="radio" id="first" name="radioBtn" />
-        <label for="first" id="label1" class="container"></label>
-        <input type="radio" id="second" name="radioBtn" />
-        <label for="second" id="label2" class="container"></label>
-        <input type="radio" id="third" name="radioBtn" />
-        <label for="third" id="label3" class="container"></label>
-        <input type="radio" id="fourth" name="radioBtn" />
-        <label for="fourth" id="label4" class="container"></label>
+    <div id="quiz-mode" class="quiz-mode">Pactice Mode</div>
+    <div class="center">
+      <div id="quiz" class="quiz">
+        <div id="heading" class="heading"></div>
+        <div id="question"></div>
+        <div id="options" class="options">
+          <hr>
+          <div class="row">
+            <input type="radio" id="first" name="radioBtn" />
+            <label for="first" id="label1" class="container"></label>
+          </div>
+          <hr>
+          <div class="row">
+            <input type="radio" id="second" name="radioBtn" />
+            <label for="second" id="label2" class="container"></label>
+          </div>
+          <hr>
+          <div class="row">
+            <input type="radio" id="third" name="radioBtn" />
+            <label for="third" id="label3" class="container"></label>
+          </div>
+          <hr>
+          <div class="row">
+            <input type="radio" id="fourth" name="radioBtn" />
+            <label for="fourth" id="label4" class="container"></label>
+          </div>
+          <hr>
+        </div>
+        <div class="results">
+          <div class="progress-details">
+            <div id="countdown" class="timeout"></div>
+            <div id="message"></div>
+          </div>
+          <div class="progress-button">
+            <div></div>
+            <div id="results-div"></div>
+          </div>
+        </div>
       </div>
-      <div id="countdown" class="timeout"></div>
-      <div id="message"></div>
-      <div id="results-div"></div>
+      <div id="complete-quiz"></div>
     </div>
     <script src="assets/js/script.js"></script>
   </body>

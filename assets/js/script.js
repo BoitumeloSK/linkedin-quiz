@@ -1,135 +1,147 @@
-//declare global variables
-
 var decreaseTime;
 var questionTime;
 var quizTime;
 var totalTime = [];
 var correctAnswers = [];
 var responses = [];
-
-var quizDiv = $("#quiz").css("display", "none");
-var options = $("#options").css("display", "none");
-var countdown = $("#countdown")
-var resultsDiv = $("#results-div").css("display", "none");
-var messageDiv = $("#message").css("display", "none");
-var beginQuiz = $("#begin-quiz");
-//var quizDiv = $("#quiz").css("display", "none");
+var count = 0;
+var countdown = $('#countdown')
+var resultsDiv = $('#results-div').css('display', 'none');
+var messageDiv = $('#message').css('display', 'none');
+var completeQuiz = $('#complete-quiz').css('display', 'none')
 
 var questions = [
   {
-    question: "2 X 4 = ",
-    answers: [6, 7, 8, 9],
-    correct: 8,
+    question: 'Which command is used to create a .git folder in the existing project directory?',
+    answers: [
+      'git add', 
+      'git init', 
+      'git gui', 
+      'git diff'],
+    correct: 'git init',
   },
 
   {
-    question: "36 / 6 = ",
-    answers: [18, 6, 12, 8],
-    correct: 6,
+    question: 'In version control a database server that contains all the files and their history is called___',
+    answers: [
+      'clone',
+      'copy', 
+      'repository', 
+      'branch'],
+    correct: 'repository',
   },
 
   {
-    question: "102 + 2(12 - 4) = ",
-    answers: [105, 124, 832, 118],
-    correct: 118,
+    question: 'To bring together changes made from different sources which operation is used in version control?',
+    answers: [
+      'merge', 
+      'pull', 
+      'push', 
+      'commit'],
+    correct: 'merge',
   },
 
   {
-    question: "1 + 48 / 12 X 3 = ",
-    answers: [13, 12.25, 1.36, 14],
-    correct: 13,
+    question: 'What command lets you create a connection between a local and remote repository?',
+    answers: [
+      'git remote add new', 
+      'git remote new origin', 
+      'git remote origin', 
+      'git remote add origin'],
+    correct: 'git remote add origin',
   },
   {
-    question: "1 + 1 = ",
-    answers: [4, 3, 2, 1],
-    correct: 2,
+    question: 'Which command gets a copy of an existing Git repository',
+    answers: [
+      'copy', 
+      'replicate', 
+      'clone', 
+      'duplicate'],
+    correct: 'clone',
   },
 ];
-var count = 0;
-var answers = questions[count].answers;
-var startBtn = $("<button>").text("Start");
-var startQuiz = $("#start-quiz");
-var headingDiv = $("#heading")
-  .css("background-color", "grey")
-  .css("text-align", "center");
-var heading = $("<h2>").text("Math Quiz").css("color", "white");
-var displayQuestion = $("#question");
-var question = $("<h1>");
-var checkBtn = $("<button>").text("Check Answer").attr("class", "checkBtn");
-var nextBtn = $("<button>").text("Next").attr("class", "nextBtn");
-var completeBtn = $("<button>").text("Complete Quiz");
 
-var detailsDiv = $("<div>");
-var scoreDiv = $("<div>");
-var alertDiv = $("<div>");
-var boardDiv = $("<div>");
-var alert = $("<p>").text("Please choose a different username");
-var nameInput = $("<input>").attr("type", "text");
-var submitBtn = $("<button>").text("Submit");
-var viewBoard = $("<button>").text("View Score Board");
-var stored = JSON.parse(localStorage.getItem("scoreBoard"));
+var answers = questions[count].answers;
+var startBtn = $('<button>').text('Start');
+var heading = $('<p>').text('Git Assessment');
+var question = $('<p>').css('text-align','center');
+var checkBtn = $('<button>').text('Check Answer').attr('class', 'check-btn');
+var nextBtn = $('<button>').text('Next').attr('class', 'next-btn');
+var completeBtn = $('<button>').text('Complete Quiz').attr('class', 'complete-btn');
+var detailsDiv = $('<div>').attr('class', 'format-content');
+var scoreDiv = $('<div>').attr('class', 'format-content');
+//var alertDiv = $('<div>');
+var boardDiv = $('<div>');
+//var alert = $('<p>').text('Please choose a different username');
+var nameInput = $('<input>').attr('type', 'text');
+var submitBtn = $('<button>').text('Submit').attr("class", "submit-btn");
+var viewBoard = $('<button>').text('View Score Board').attr('class', 'leader-board');
+var stored = JSON.parse(localStorage.getItem('scoreBoard'));
 var users = stored || [];
 
-startQuiz.append(startBtn);
+$('#quiz').css('display', 'none');
+$('#options').css('display', 'none');
+$('#quiz-mode').css('display', 'none');
+
+$('#start-quiz').append(startBtn);
 
 function labels() {
-  $("#label1").text(answers[0]);
-  $("#first").val(answers[0]);
-  $("#label2").text(answers[1]);
-  $("#second").val(answers[1]);
-  $("#label3").text(answers[2]);
-  $("#third").val(answers[2]);
-  $("#label4").text(answers[3]);
-  $("#fourth").val(answers[3]);
+  $('#first').val(answers[0]);
+  $('#second').val(answers[1]);
+  $('#third').val(answers[2]);
+  $('#fourth').val(answers[3]);
+  $('#label1').text(answers[0]);
+  $('#label2').text(answers[1]);
+  $('#label3').text(answers[2]);
+  $('#label4').text(answers[3]);
 }
 
 /**Starts the quiz */
-startBtn.on("click", function () {
+startBtn.on('click', function () {
   var time = 15;
   var decreaseTime1 = setInterval(() => {
     time -= 1;
-    countdown.text(time + " seconds left");
+    countdown.text(time + ' seconds left');
     if (time <= 0) {
       clearInterval(decreaseTime1);
       checkBtn.click();
-      messageDiv.text("Timeout!").css("color", "red");
+      messageDiv.text('Timeout!').css('color', 'red');
     }
   }, 1000);
 
   question.text(questions[count].question);
-  countdown.text(time + " seconds left");
+  countdown.text(time + ' seconds left');
 
-  quizDiv.css("display", "flex")
-  .css("flex-direction", "column")
-  .css("align-items", "center");
-  startQuiz.css("display", "none");
-  options.css("display", "flex").css("align-items", "center");
-  resultsDiv.css("display", "flex");
-  nextBtn.css("display", "none");
+  $('#quiz').css('display', 'flex')
+  $('#start-quiz').css('display', 'none');
+  $('#options').css('display', 'flex');
+  $('#quiz-mode').css('display', 'block');
+  resultsDiv.css('display', 'flex');
+  nextBtn.css('display', 'none');
 
-  headingDiv.append(heading);
-  displayQuestion.append(question);
+  $('#heading').append(heading);
+  $('#question').append(question);
   labels();
   resultsDiv.append(checkBtn);
   resultsDiv.append(nextBtn);
 
   function startTime() {
-    countdown.text(time + " seconds left");
+    countdown.text(time + ' seconds left');
+    time -= 1;
     if (time <= 0) {
       clearInterval(decreaseTime);
       checkBtn.click();
-      messageDiv.text("Timeout!").css("color", "red");
+      messageDiv.text('Timeout!').css('color', 'red');
     }
-    time -= 1;
   }
 
-  /** Moves on to the next question after 5 seconds (test) - currently only works for 1st question*/
   function nextQuestion() {
-    nextBtn.css("display", "none");
-    checkBtn.css("display", "block");
-    messageDiv.css("display", "none");
-    $("input[type=radio]").prop("checked", false);
-
+    nextBtn.css('display', 'none');
+    checkBtn.css('display', 'block');
+    messageDiv.css('display', 'none');
+    $('input[type=radio]').prop('checked', false);
+    countdown.text(time + ' seconds left');
+    console.log(time)
     count = count + 1;
 
     if (count <= 4) {
@@ -140,18 +152,20 @@ startBtn.on("click", function () {
   }
 
   /**Stops the timer and checks if the selected answer is the correct number for the question */
-  checkBtn.on("click", function () {
+  checkBtn.on('click', function () {
+    $('input[type=radio]').attr('disabled', true);
     clearInterval(decreaseTime);
-    var checkedNumber = $("input[type=radio]:checked").val();
+    var checkedNumber = $('input[type=radio]:checked').val();
     var x = questions[count].correct;
     questionTime = 15 - time;
+    console.log(quizTime,'hello')
     quizTime = 0;
+    console.log(time)
+    
 
-    countdown.text(time + " seconds left");
-
-    checkBtn.css("display", "none");
-    nextBtn.css("display", "block");
-    messageDiv.css("display", "flex");
+    checkBtn.css('display', 'none');
+    nextBtn.css('display', 'block');
+    messageDiv.css('display', 'flex');
 
     clearInterval(decreaseTime1);
 
@@ -159,75 +173,73 @@ startBtn.on("click", function () {
     totalTime.forEach((t) => {
       quizTime += t;
     });
-    console.log(totalTime);
 
     if (checkedNumber != undefined) {
       responses.push(checkedNumber);
     }
 
-    messageDiv.innerText = "";
+    messageDiv.innerText = '';
 
-    if (Number(checkedNumber) == Number(x)) {
+    if (checkedNumber == x) {
       messageDiv
-        .text("Correct")
-        .css("color", "green")
-        .css("text-align", "center");
+        .text('Correct')
+        .css('color', 'green')
+        .css('text-align', 'center');
       correctAnswers.push(checkedNumber);
     } else {
       messageDiv
-        .text("Incorrect")
-        .css("color", "red")
-        .css("text-align", "center");
+        .text('Incorrect')
+        .css('color', 'red')
+        .css('text-align', 'center');
     }
 
     if (count == 4) {
-      nextBtn.css("display", "none");
+      nextBtn.css('display', 'none');
       resultsDiv.append(completeBtn);
-      completeBtn.css("display", "block");
+      completeBtn.css('display', 'block');
     }
   });
 
   /**Records the selected answer for each question and goes to the next question when clicked */
-  nextBtn.on("click", function () {
-    setTimeout(() => {
-      nextQuestion();
-    }, 1000);
+  nextBtn.on('click', function () {
+    $('input[type=radio]').attr('disabled', false);
     time = 15;
+    nextQuestion();
     decreaseTime = setInterval(startTime, 1000);
   });
 
   /**Shows quiz results */
-  completeBtn.on("click", function () {
-    var congratulations = $("<h1>").text("Quiz Complete");
-    var answered = $("<p>").text(
+  completeBtn.on('click', function () {
+    var congratulations = $('<p>').text('Quiz Complete').attr('class', 'results-heading');
+    var answered = $('<p>').text(
       `You have answered ${responses.length} out of ${questions.length} questions`
     );
-    var score = $("<p>").text(
+    var score = $('<p>').text(
       `Your score is ${correctAnswers.length} out of ${questions.length}`
     );
-    var scoreTime = $("<p>").text(
+    var scoreTime = $('<p>').text(
       `You completed the quiz in ${quizTime} seconds`
     );
-    
+  
+    $('#quiz').css('display', 'none');
+    $('#quiz-mode').css('display', 'flex').text('Quiz Results');
+    completeQuiz.css('display', 'flex').attr('class','complete-quiz')
 
-    quizDiv.css("display", "none");
-    beginQuiz.css("display", "block");
-    startBtn.css("display", "none");
 
-    beginQuiz.append(detailsDiv);
+    completeQuiz.append(detailsDiv);
     detailsDiv.append(congratulations);
     detailsDiv.append(answered);
     detailsDiv.append(score);
     detailsDiv.append(scoreTime);
-    beginQuiz.append(alertDiv);
-    beginQuiz.append(scoreDiv);
+    //completeQuiz.append(alertDiv);
+    completeQuiz.append(scoreDiv);
     scoreDiv.append(nameInput);
     scoreDiv.append(submitBtn);
   });
 
-  submitBtn.on("click", function () {
+  submitBtn.on('click', function () {
     var details = {
-      username: "",
+      username: '',
       points: correctAnswers.length,
       timeRecord: Number(quizTime),
     };
@@ -245,27 +257,27 @@ startBtn.on("click", function () {
       return b.points - a.points || a.timeRecord - b.timeRecord;
     });
 
-    scoreDiv.css("display", "none");
-    detailsDiv.css("display", "none");
-    alertDiv.css("display", "none");
+    scoreDiv.css('display', 'none');
+    detailsDiv.css('display', 'none');
+    //alertDiv.css('display', 'none');
 
-    beginQuiz.append(boardDiv);
+    completeQuiz.append(boardDiv);
     boardDiv.append(viewBoard);
   });
 
-  viewBoard.on("click", function(){
-    viewBoard.css("display", "none")
-    localStorage.setItem("scoreBoard", JSON.stringify(users));
+  viewBoard.on('click', function(){
+    viewBoard.css('display', 'none')
+    localStorage.setItem('scoreBoard', JSON.stringify(users));
       if (stored == null) {
         boardDiv.append(
-          $("<div>").text(
+          $('<div>').text(
             `${details.username} | ${details.points} | ${details.timeRecord}`
           )
         );
       } else {
         stored.forEach((item) => {
           boardDiv.append(
-            $("<div>").text(
+            $('<div>').text(
               `${item.username} | ${item.points} | ${item.timeRecord}`
             )
           );
@@ -274,13 +286,3 @@ startBtn.on("click", function () {
   })
 });
 
-
-
-//if(checkedNumber != question.correct)
-// else
-// {
-//   count = count
-//   console.log
-//   var message = $("<p>").text("Please select an answer")
-//   messageDiv.append(message)
-// }

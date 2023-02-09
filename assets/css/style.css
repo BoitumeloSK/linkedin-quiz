@@ -6,30 +6,168 @@ p{
 }
 body{
     margin:0 auto;
-    background-color: #e0e0ed;
+    background-color: #f3f3f3;
+}
+nav a{
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    color: #6e6e6e;
+    align-items:center;
+}
+nav{
+    overflow: hidden;
+    font-size: 1rem;
+    position:relative;
+    flex-direction: row;
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0px 6vw;
+    background-color: white;
+}
+nav ul{
+    list-style-type: none;
+    margin: 0;
+    padding-left: 1.5vw;
+}
+nav li{
+    display: inline-block;
+    text-align: center;
+    align-items: center;
+    margin: 0 10px;
+}
+.logo, nav ul{
+    display:flex;
+    align-items: center;
+}
+.user{
+    width: 25px;
+}
+i{
+    color: #6e6e6e;
+}
+.site-search, .complete-quiz input{
+    padding: 11px;
+    border: 0;
+    border-radius: 3px;
+}
+.site-search{
+    background-color: #e3eff3;
+}
+.complete-quiz input{
+    background-color: whitesmoke;
+    border: 1px solid #b9b6b6;
+    margin-bottom: 10px;
+    width: 25%;
+}
+.vl {
+    border-left: 1px solid #b9b6b6;
+    height: 50px;
+    margin: 0 10px;
+  }
+.quiz-mode{
+    background-color: #3f5f81;
+    text-align: center;
+    padding: 8px;
+    color: white;
+}
+
+/*Has to do with options*/
+.row{
+    display: flex;
+    margin: 10px 0;
+}
+.options{
+    flex-direction: column;
+    width:95%;
+}
+hr{
+    width:100%;
+    opacity: 0.2;
+    margin:0;
+}
+label{
+    margin-left: 10px
+}
+/*End of quiz*/
+.results{
+    display: flex;
+    width: 100%;
+}
+.progress-details, .progress-button{
+    width:50%;
+    display: flex;
+    align-items: center;
+}
+.progress-button{
+    justify-content: space-between;
 }
 .quiz{
-    border: 1px solid #25282a;
     border-radius: 4px;
     width: 60%;
     margin: 16px;
     background-color: white;
+    flex-direction: column;
+    align-items: center;
+}
+
+.center{
     display: flex;
+    justify-content: center;
 }
 .begin-quiz{
     display: flex;
     justify-content: center;
 }
-.begin-quiz > button{
+button{
     cursor: pointer;
-    padding: 12px;
-    margin: 16px;
-    width: 20%;
-    background-color: #4775d9;
-    border: 1px solid #afafaf;
+    padding: 10px;
     color: white;
-    border-radius: 2px;
     font-size: 16px;
+    border: 1px solid #afafaf;
+    border-radius: 20px;
+    margin: 0 10px;
+}
+.begin-quiz > button, .leader-board{
+    margin: 16px;
+    background-color: #0077B5;
+}
+.begin-quiz > button{
+    width: 10%;
+}
+.next-btn{
+    width: 100px;
+    background-color: #5d00ff;
+}
+.complete-btn, .submit-btn{
+    background-color: #23b91e;
+}
+.check-btn{
+    background-color: #ff6500;
+}
+.complete-quiz{
+    background-color: white;
+    width: 60%;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+.results-heading{
+    margin-top: 0;
+    width: 100%;
+    background-color: #6e6e6e;
+    color:white;
+    font-size: 17px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    padding: 6px 0;
+}
+.format-content{
+    width: 100%;
+    text-align: center;
 }
 .show{
     display: block;
@@ -46,31 +184,25 @@ button{
 .timeout{
     margin:16px
 }
+
+
+.heading > p{
+    font-size: 17px;
+    margin: 6px 0;
+    color: white;
+}
 .heading{
     width: 100%;
+    background-color: #6e6e6e;
+    text-align: center;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
 }
-.checkBtn{
-    padding: 10px;
-    width: 200px;
-    color: white;
-    font-size: 16px;
-    background-color: #ff6500;
-    border: 1px solid #7e7c7c;
-    border-radius: 20px;
-}
-.nextBtn{
-    padding: 10px;
-    width: 100px;
-    color: white;
-    font-size: 16px;
-    background-color: #5d00ff;
-    border: 1px solid #7e7c7c;
-    border-radius: 20px;
-}
+
 /* input[type=radio][class="car"]{
 
 } */
-:root {
+/* :root {
     --form-control-color: rebeccapurple;
   }
   
@@ -82,13 +214,13 @@ button{
 
   
   input[type="radio"] {
-    /* Add if not using autoprefixer */
+    /* Add if not using autoprefixer 
     -webkit-appearance: none;
-    /* Remove most all native input styles */
+    /* Remove most all native input styles 
     appearance: none;
-    /* For iOS < 15 */
+    /* For iOS < 15 
     background-color: var(--form-background);
-    /* Not removed via appearance */
+    /* Not removed via appearance 
     margin: 10px;
   
     font: inherit;
@@ -108,7 +240,7 @@ button{
     transform: scale(0);
     transition: 120ms transform ease-in-out;
     box-shadow: inset 1em 1em var(--form-control-color);
-    /* Windows High Contrast Mode */
+    /* Windows High Contrast Mode 
     background-color: CanvasText;
   }
   
@@ -123,4 +255,4 @@ button{
   }
   input[type="radio"]:focus-within ::after {
   color: var(--form-control-color);
-}
+} */
