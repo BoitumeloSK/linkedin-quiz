@@ -141,7 +141,6 @@ startBtn.on('click', function () {
     messageDiv.css('display', 'none');
     $('input[type=radio]').prop('checked', false);
     countdown.text(time + ' seconds left');
-    console.log(time)
     count = count + 1;
 
     if (count <= 4) {
@@ -158,10 +157,7 @@ startBtn.on('click', function () {
     var checkedNumber = $('input[type=radio]:checked').val();
     var x = questions[count].correct;
     questionTime = 15 - time;
-    console.log(quizTime,'hello')
     quizTime = 0;
-    console.log(time)
-    
 
     checkBtn.css('display', 'none');
     nextBtn.css('display', 'block');
@@ -178,19 +174,11 @@ startBtn.on('click', function () {
       responses.push(checkedNumber);
     }
 
-    messageDiv.innerText = '';
-
     if (checkedNumber == x) {
-      messageDiv
-        .text('Correct')
-        .css('color', 'green')
-        .css('text-align', 'center');
+      $('input[id]:checked ~ label').css('color', 'green')
       correctAnswers.push(checkedNumber);
     } else {
-      messageDiv
-        .text('Incorrect')
-        .css('color', 'red')
-        .css('text-align', 'center');
+      $('input[id]:checked ~ label').css('color', 'red')
     }
 
     if (count == 4) {
@@ -203,6 +191,7 @@ startBtn.on('click', function () {
   /**Records the selected answer for each question and goes to the next question when clicked */
   nextBtn.on('click', function () {
     $('input[type=radio]').attr('disabled', false);
+    $('input[id]:checked ~ label').css('color', '#25282a')
     time = 15;
     nextQuestion();
     decreaseTime = setInterval(startTime, 1000);
