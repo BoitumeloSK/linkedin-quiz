@@ -68,16 +68,17 @@ var question = $('<p>').css('text-align','center');
 var checkBtn = $('<button>').text('Check Answer').attr('class', 'check-btn');
 var nextBtn = $('<button>').text('Next').attr('class', 'next-btn');
 var completeBtn = $('<button>').text('Complete Quiz').attr('class', 'complete-btn');
-var detailsDiv = $('<div>').attr('class', 'format-content');
-var scoreDiv = $('<div>').attr('class', 'format-content');
+var scoreDetails = $('#score-details');
+var boardInput = $('#board-input')
 //var alertDiv = $('<div>');
-var boardDiv = $('<div>');
+var boardDiv = $('#board-div');
 //var alert = $('<p>').text('Please choose a different username');
-var nameInput = $('<input>').attr('type', 'text');
+var nameInput = $('<input>').attr('type', 'text').attr('placeholder', 'Enter username..')
 var submitBtn = $('<button>').text('Submit').attr("class", "submit-btn");
 var viewBoard = $('<button>').text('View Score Board').attr('class', 'leader-board');
 var stored = JSON.parse(localStorage.getItem('scoreBoard'));
 var users = stored || [];
+var scoreOption
 
 $('#quiz').css('display', 'none');
 $('#options').css('display', 'none');
@@ -170,8 +171,12 @@ startBtn.on('click', function () {
       quizTime += t;
     });
 
+    
     if (checkedNumber != undefined) {
       responses.push(checkedNumber);
+      messageDiv.text('')
+    }else if (checkedNumber == undefined && time !=0){
+      messageDiv.text('No answer').css('color', 'red')
     }
 
     if (checkedNumber == x) {
@@ -179,7 +184,7 @@ startBtn.on('click', function () {
       correctAnswers.push(checkedNumber);
     } else {
       $('input[id]:checked ~ label').css('color', 'red')
-    }
+    } 
 
     if (count == 4) {
       nextBtn.css('display', 'none');
@@ -199,9 +204,10 @@ startBtn.on('click', function () {
 
   /**Shows quiz results */
   completeBtn.on('click', function () {
-    var congratulations = $('<p>').text('Quiz Complete').attr('class', 'results-heading');
+    $('#results-heading').text('Quiz-complete')
+    var done = $('<h3>').text('Well done! You have reached the end of the assessment.')
     var answered = $('<p>').text(
-      `You have answered ${responses.length} out of ${questions.length} questions`
+      `You answered ${responses.length} out of ${questions.length} questions`
     );
     var score = $('<p>').text(
       `Your score is ${correctAnswers.length} out of ${questions.length}`
@@ -209,24 +215,25 @@ startBtn.on('click', function () {
     var scoreTime = $('<p>').text(
       `You completed the quiz in ${quizTime} seconds`
     );
+    scoreOption =$('<p>').text('If you would like to add your results on the scoreboard please enter a username below:')
   
     $('#quiz').css('display', 'none');
+    boardDiv.css('display', 'none')
     $('#quiz-mode').css('display', 'flex').text('Quiz Results');
     completeQuiz.css('display', 'flex').attr('class','complete-quiz')
 
-
-    completeQuiz.append(detailsDiv);
-    detailsDiv.append(congratulations);
-    detailsDiv.append(answered);
-    detailsDiv.append(score);
-    detailsDiv.append(scoreTime);
+    scoreDetails.append(done)
+    scoreDetails.append(answered);
+    scoreDetails.append(score);
+    scoreDetails.append(scoreTime);
+    boardInput.append(scoreOption)
+    boardInput.append(nameInput);
+    boardInput.append(submitBtn);
     //completeQuiz.append(alertDiv);
-    completeQuiz.append(scoreDiv);
-    scoreDiv.append(nameInput);
-    scoreDiv.append(submitBtn);
   });
 
   submitBtn.on('click', function () {
+    console.log('click')
     var details = {
       username: '',
       points: correctAnswers.length,
@@ -246,18 +253,43 @@ startBtn.on('click', function () {
       return b.points - a.points || a.timeRecord - b.timeRecord;
     });
 
-    scoreDiv.css('display', 'none');
-    detailsDiv.css('display', 'none');
-    //alertDiv.css('display', 'none');
+    scoreOption.text('Click the button below to view the score board')
 
-    completeQuiz.append(boardDiv);
-    boardDiv.append(viewBoard);
+    nameInput.css('display', 'none')
+    submitBtn.css('display', 'none')
+    boardDiv.css('display', 'none')
+    boardInput.append(viewBoard);
+    //alertDiv.css('display', 'none');
   });
 
   viewBoard.on('click', function(){
-    viewBoard.css('display', 'none')
     localStorage.setItem('scoreBoard', JSON.stringify(users));
+    // var row = $('<tr>')
+    // var cell1 = $('<td>')
+    // var cell2 = $('<td>')
+    // var column3 = $('<td>')
+
+    // var row = $('#table').insertRow()
+    // var cell1 = row.insertCell(0)
+    // var cell2 = row.insertCell(1)
+    // var cell2 = row.insertCell(2)
+
       if (stored == null) {
+        // cell1.innerHTML = details.username
+        // cell2.innerHTML = details.points
+        // cell3.innerHTML = details.timeRecord
+
+
+        // cell1.text(details.username)
+        // cell2.text(details.points)
+        // cell3.text(details.timeRecord)
+        
+       
+        // row.append(cell1)
+        // row.append(cell2)
+        // row.append(cell3)
+        // $('#table').append(row)
+  
         boardDiv.append(
           $('<div>').text(
             `${details.username} | ${details.points} | ${details.timeRecord}`
@@ -265,6 +297,19 @@ startBtn.on('click', function () {
         );
       } else {
         stored.forEach((item) => {
+          // cell1.innerHTML = item.username
+          // cell2.innerHTML = item.points
+          // cell3.innerHTML = item.timeRecord
+
+          // cell1.text(item.username)
+          // cell2.text(item.points)
+          // cell3.text(item.timeRecord)
+        
+          // row.append(cell1)
+          // row.append(cell2)
+          // row.append(cell3)
+          // $('#table').append(row)
+
           boardDiv.append(
             $('<div>').text(
               `${item.username} | ${item.points} | ${item.timeRecord}`
@@ -272,6 +317,11 @@ startBtn.on('click', function () {
           );
         });
       }
+
+      $('#results-heading').text('Score Board')
+      scoreDetails.css('display', 'none')
+      boardInput.css('display', 'none')
+      boardDiv.css('display', 'block')
   })
 });
 
