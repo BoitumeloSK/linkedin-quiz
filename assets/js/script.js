@@ -264,57 +264,37 @@ startBtn.on('click', function () {
 
   viewBoard.on('click', function(){
     localStorage.setItem('scoreBoard', JSON.stringify(users));
-    // var row = $('<tr>')
-    // var cell1 = $('<td>')
-    // var cell2 = $('<td>')
-    // var column3 = $('<td>')
-
-    // var row = $('#table').insertRow()
-    // var cell1 = row.insertCell(0)
-    // var cell2 = row.insertCell(1)
-    // var cell2 = row.insertCell(2)
 
       if (stored == null) {
-        // cell1.innerHTML = details.username
-        // cell2.innerHTML = details.points
-        // cell3.innerHTML = details.timeRecord
+        var row = $('<tr>')
+        var cell1 = $('<td>')
+        var cell2 = $('<td>')
+        var cell3 = $('<td>')
 
-
-        // cell1.text(details.username)
-        // cell2.text(details.points)
-        // cell3.text(details.timeRecord)
+        cell1.text(details.username)
+        cell2.text(details.points)
+        cell3.text(details.timeRecord)
         
        
-        // row.append(cell1)
-        // row.append(cell2)
-        // row.append(cell3)
-        // $('#table').append(row)
-  
-        boardDiv.append(
-          $('<div>').text(
-            `${details.username} | ${details.points} | ${details.timeRecord}`
-          )
-        );
+        row.append(cell1)
+        row.append(cell2)
+        row.append(cell3)
+        $('#table').append(row)
       } else {
         stored.forEach((item) => {
-          // cell1.innerHTML = item.username
-          // cell2.innerHTML = item.points
-          // cell3.innerHTML = item.timeRecord
+          var row = $('<tr>')
+          var cell1 = $('<td>')
+          var cell2 = $('<td>')
+          var cell3 = $('<td>')
 
-          // cell1.text(item.username)
-          // cell2.text(item.points)
-          // cell3.text(item.timeRecord)
+          cell1.text(item.username)
+          cell2.text(item.points)
+          cell3.text(item.timeRecord)
         
-          // row.append(cell1)
-          // row.append(cell2)
-          // row.append(cell3)
-          // $('#table').append(row)
-
-          boardDiv.append(
-            $('<div>').text(
-              `${item.username} | ${item.points} | ${item.timeRecord}`
-            )
-          );
+          row.append(cell1)
+          row.append(cell2)
+          row.append(cell3)
+          $('#table').append(row)
         });
       }
 
