@@ -1,6 +1,6 @@
 # LinkedIn Git Assessment 
 
-This project is a clone of the LinkedIn github assessment. It has a total of 5 questions each with 15 seconds to answer. If the answer is correct it is highlighted in green, if it is incorrect, it is highlighted in red. The assessment details are revealed to the user at the end (i.e. number of answers answered, number of correct answers, and time taken to answer the quiz). An option to be added to the localstorage score board is also made available.  
+This project is a clone of the LinkedIn github assessment. It has a total of 5 questions each with 15 seconds to answer. If the answer is correct it is highlighted in green, if it is incorrect, it is highlighted in red. The assessment details are revealed to the user at the end (i.e. number of answers answered, number of correct answers, and time taken to answer the quiz). An option to be added to the localstorage score board is also made available. Development was done using JavaScript, HTML, and CSS.
 
 ## Table fo Contents 
 - [Installation](#installation)
