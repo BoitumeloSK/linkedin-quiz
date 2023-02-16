@@ -72,7 +72,7 @@ var boardInput = $('#board-input')
 var boardDiv = $('#board-div');
 var nameInput = $('<input>').attr('type', 'text').attr('placeholder', 'Enter username..')
 var submitBtn = $('<button>').text('Submit').attr("class", "submit-btn");
-var viewBoard = $('<button>').text('View Score Board').attr('class', 'leader-board');
+var viewBoard = $('<button>').text('View Score Board').attr('class', 'score-board');
 var stored = JSON.parse(localStorage.getItem('scoreBoard'));
 var users = stored || [];
 var scoreOption
