@@ -63,16 +63,13 @@ var questions = [
 
 var answers = questions[count].answers;
 var startBtn = $('<button>').text('Start');
-var heading = $('<p>').text('Git Assessment');
 var question = $('<p>').css('text-align','center');
 var checkBtn = $('<button>').text('Check Answer').attr('class', 'check-btn');
 var nextBtn = $('<button>').text('Next').attr('class', 'next-btn');
 var completeBtn = $('<button>').text('Complete Quiz').attr('class', 'complete-btn');
 var scoreDetails = $('#score-details');
 var boardInput = $('#board-input')
-//var alertDiv = $('<div>');
 var boardDiv = $('#board-div');
-//var alert = $('<p>').text('Please choose a different username');
 var nameInput = $('<input>').attr('type', 'text').attr('placeholder', 'Enter username..')
 var submitBtn = $('<button>').text('Submit').attr("class", "submit-btn");
 var viewBoard = $('<button>').text('View Score Board').attr('class', 'leader-board');
@@ -120,7 +117,7 @@ startBtn.on('click', function () {
   resultsDiv.css('display', 'flex');
   nextBtn.css('display', 'none');
 
-  $('#heading').append(heading);
+  $('#heading').text('Git Assessment')
   $('#question').append(question);
   labels();
   resultsDiv.append(checkBtn);
@@ -171,7 +168,6 @@ startBtn.on('click', function () {
       quizTime += t;
     });
 
-    
     if (checkedNumber != undefined) {
       responses.push(checkedNumber);
       messageDiv.text('')
@@ -229,7 +225,6 @@ startBtn.on('click', function () {
     boardInput.append(scoreOption)
     boardInput.append(nameInput);
     boardInput.append(submitBtn);
-    //completeQuiz.append(alertDiv);
   });
 
   submitBtn.on('click', function () {
@@ -242,12 +237,6 @@ startBtn.on('click', function () {
 
     details.username = nameInput.val();
 
-    // if (users.includes(details.username)) {
-    //   alertDiv.append(alert);
-    // } else {
-
-    // }
-
     users.push(details);
     users.sort((a, b) => {
       return b.points - a.points || a.timeRecord - b.timeRecord;
@@ -259,7 +248,6 @@ startBtn.on('click', function () {
     submitBtn.css('display', 'none')
     boardDiv.css('display', 'none')
     boardInput.append(viewBoard);
-    //alertDiv.css('display', 'none');
   });
 
   viewBoard.on('click', function(){
@@ -275,7 +263,6 @@ startBtn.on('click', function () {
         cell2.text(details.points)
         cell3.text(details.timeRecord)
         
-       
         row.append(cell1)
         row.append(cell2)
         row.append(cell3)
