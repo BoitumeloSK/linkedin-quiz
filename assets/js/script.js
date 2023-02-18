@@ -228,7 +228,6 @@ startBtn.on("click", function () {
   });
 
   submitBtn.on("click", function () {
-    console.log("click");
     var details = {
       username: "",
       points: correctAnswers.length,
@@ -254,20 +253,22 @@ startBtn.on("click", function () {
     localStorage.setItem("scoreBoard", JSON.stringify(users));
 
     if (stored == null) {
+      users.forEach(user =>{
       var row = $("<tr>");
       var cell1 = $("<td>");
       var cell2 = $("<td>");
       var cell3 = $("<td>");
 
-      cell1.text(details.username);
-      cell2.text(details.points);
-      cell3.text(details.timeRecord);
+      cell1.text(user.username);
+      cell2.text(user.points);
+      cell3.text(user.timeRecord);
 
       row.append(cell1);
       row.append(cell2);
       row.append(cell3);
       $("#table").append(row);
-    } else {
+      })
+    } else{
       stored.forEach((item) => {
         var row = $("<tr>");
         var cell1 = $("<td>");
@@ -284,7 +285,7 @@ startBtn.on("click", function () {
         $("#table").append(row);
       });
     }
-
+      
     $("#results-heading").text("Score Board");
     scoreDetails.css("display", "none");
     boardInput.css("display", "none");
